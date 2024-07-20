@@ -1,8 +1,18 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, SectionList, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, StyleSheet, SectionList, TouchableOpacity, Modal } from 'react-native';
 import { HomeData } from '../../../data'; // Import your formatted data
+import menuOptions from '../../../modals/menuOptions';
 
 const HomeSectionList = () => {
+    const [isMenuVisible, setMenuVisible] = useState<boolean>(false);
+    const [selectedItem, setSelectedItem] = useState<any>(null);
+
+    // Food list Item toggle menu
+    const handleMenuToggle = (item: any) => {
+        setSelectedItem(item);
+        setMenuVisible(!isMenuVisible);
+    };
+
     // Render function for each item in the SectionList
     const renderItem = ({ item }) => (
         <TouchableOpacity style={styles.itemContainer}>
@@ -12,10 +22,11 @@ const HomeSectionList = () => {
                     <Image source={item.icon} style={styles.itemIcon} />
                     <Text style={styles.itemName}>{item.name}</Text>
                     <Text style={styles.itemDetailsText}>{item.details}</Text>
-                    <Image source={item.dotsIcon} style={styles.dotsIcon} />
+                    <TouchableOpacity onPress={() => handleMenuToggle(item)}>
+                        <Image source={item.dotsIcon}  />
+                    </TouchableOpacity>
                 </View>
-                <Text style={styles.itemPrice}><Text>per price </Text>
-                   {item.price}</Text>
+                <Text style={styles.itemPrice}><Text>per price </Text>{item.price}</Text>
             </View>
         </TouchableOpacity>
     );
@@ -28,13 +39,30 @@ const HomeSectionList = () => {
     );
 
     return (
-        <SectionList
-            sections={HomeData || []} // Default to empty array if HomeData is undefined
-            keyExtractor={(item) => item.id}
-            renderItem={renderItem}
-            renderSectionHeader={renderSectionHeader}
-            contentContainerStyle={styles.container}
-        />
+        <>
+            <SectionList
+                sections={HomeData || []} // Default to empty array if HomeData is undefined
+                keyExtractor={(item) => item.id}
+                renderItem={renderItem}
+                renderSectionHeader={renderSectionHeader}
+                contentContainerStyle={styles.container}
+            />
+            <Modal
+                transparent={true}
+                visible={isMenuVisible}
+                onRequestClose={() => setMenuVisible(false)}
+            >
+                <TouchableOpacity style={styles.modalBackground} onPress={() => setMenuVisible(false)}>
+                    <TouchableOpacity style={styles.menu} activeOpacity={1}>
+                        {menuOptions(setMenuVisible).map((option, index) => (
+                            <TouchableOpacity key={index} style={styles.menuItem} onPress={option.onPress}>
+                                <Text style={styles.menuItemText}>{option.label}</Text>
+                            </TouchableOpacity>
+                        ))}
+                    </TouchableOpacity>
+                </TouchableOpacity>
+            </Modal>
+        </>
     );
 };
 
@@ -62,7 +90,7 @@ const styles = StyleSheet.create({
     },
     rowContainer: {
         flexDirection: 'row',
-        justifyContent:'space-around',
+        justifyContent: 'space-around',
         alignItems: 'center',
     },
     itemImage: {
@@ -85,11 +113,38 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#3a3b3c',
         fontWeight: 'bold',
-        marginTop:20,
+        marginTop: 20,
     },
     itemIcon: {
         width: 20,
         height: 20,
+    },
+    dotsIcon: {
+        width: 20,
+        height: 20,
+    },
+    modalBackground: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    menu: {
+        width: 200,
+        backgroundColor: 'white',
+        borderRadius: 8,
+        padding: 16,
+        alignItems: 'flex-start',
+        left:35,
+    },
+    menuItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 10,
+    },
+    menuItemText: {
+        marginLeft: 16,
+        fontSize: 16,
     },
 });
 

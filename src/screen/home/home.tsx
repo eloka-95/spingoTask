@@ -4,6 +4,10 @@ import Topnav from './component/topnav'
 import ButtonList from './component/buttonList'
 import HomeSectionList from './component/HomeSectionList'
 
+
+
+
+
 export default function Home() {
   return (
     <View style={styles.container}>
