@@ -1,3 +1,7 @@
+![Onboarding Screen](/src/assets/Singo2creenshot%202024-07-20%20175907.png)
+![Home Screen ](/src/assets/Singo1creenshot%202024-07-20%20173925.png)
+
+
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
 # Getting Started
