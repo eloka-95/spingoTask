@@ -56,6 +56,7 @@ const HomeSectionList = () => {
                     <TouchableOpacity style={styles.menu} activeOpacity={1}>
                         {menuOptions(setMenuVisible).map((option, index) => (
                             <TouchableOpacity key={index} style={styles.menuItem} onPress={option.onPress}>
+                                <Image source={option.icon} />
                                 <Text style={styles.menuItemText}>{option.label}</Text>
                             </TouchableOpacity>
                         ))}
